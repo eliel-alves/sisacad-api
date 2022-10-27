@@ -2,25 +2,29 @@ const { Router } = require('express');
 
 const controleDisciplinas = require('./controladores/disciplinas');
 const controleProfessores = require('./controladores/professores');
+const seguranca = require('./controladores/seguranca');
 
 const rotas = new Router();
 
+rotas.route('/login')
+    .post(seguranca.login);
+
 rotas.route('/disciplinas')
-     .get(controleDisciplinas.getDisciplinas)
-     .post(controleDisciplinas.addDisciplina)
-     .put(controleDisciplinas.updateDisciplina)
+     .get(seguranca.verificaJWT, controleDisciplinas.getDisciplinas)
+     .post(seguranca.verificaJWT, controleDisciplinas.addDisciplina)
+     .put(seguranca.verificaJWT, controleDisciplinas.updateDisciplina)
 
 rotas.route('/disciplinas/:codigo')
-     .get(controleDisciplinas.getDisciplinaPorCodigo)
-     .delete(controleDisciplinas.deleteDisciplina)
+     .get(seguranca.verificaJWT, controleDisciplinas.getDisciplinaPorCodigo)
+     .delete(seguranca.verificaJWT, controleDisciplinas.deleteDisciplina)
 
 rotas.route('/professores')
-     .get(controleProfessores.getProfessores)
-     .post(controleProfessores.addProfessor)
-     .put(controleProfessores.updateProfessor)
+     .get(seguranca.verificaJWT, controleProfessores.getProfessores)
+     .post(seguranca.verificaJWT, controleProfessores.addProfessor)
+     .put(seguranca.verificaJWT, controleProfessores.updateProfessor)
 
 rotas.route('/professores/:codigo')
-     .get(controleProfessores.getProfessorPorCodigo)
-     .delete(controleProfessores.deleteProfessor)
+     .get(seguranca.verificaJWT, controleProfessores.getProfessorPorCodigo)
+     .delete(seguranca.verificaJWT, controleProfessores.deleteProfessor)
 
 module.exports = rotas;
